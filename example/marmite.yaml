@@ -23,43 +23,45 @@ logo_image: media/logo.png
 enable_search: true
 
 menu:
-  # - ["About", "about.html"]
-  - ["Pages", "pages.html"]
-  - ["Tags", "tags.html"]
-  - ["Archive", "archive.html"]
-  - ["Authors", "authors.html"]
-  # - ["Streams", "streams.html"]
-  - ["Github", "https://github.com/rochacbruno/marmite"]
+    # - ["About", "about.html"]
+    - ["Pages", "pages.html"]
+    - ["Tags", "tags.html"]
+    - ["Archive", "archive.html"]
+    - ["Authors", "authors.html"]
+    # - ["Streams", "streams.html"]
+    - ["Github", "https://github.com/rochacbruno/marmite"]
 
 # https://docs.rs/chrono/latest/chrono/format/strftime/index.html
 default_date_format: "%A, %d %B %Y"
 
 default_author: rochacbruno
 authors:
-  rochacbruno:
-    name: Bruno Rocha
-    avatar: https://github.com/rochacbruno.png
-    bio: Marmite Maintainer
-    links:
-      - ["Fediverse", "https://go.rocha.social/@bruno"]
-      - ["Github", "https://github.com/rochacbruno"]
-      - ["Linkedin", "https://www.linkedin.com/in/rochacbruno/"]
-      - ["Links", "https://bruno.rocha.social"]
-  karlamagueta:
-    name: Karla Magueta
-    avatar: https://github.com/karlamagueta.png
-    links:
-      - ["Github", "https://github.com/karlamagueta"]
+    rochacbruno:
+        name: Bruno Rocha
+        avatar: https://github.com/rochacbruno.png
+        bio: Marmite Maintainer
+        links:
+            - ["Fediverse", "https://go.rocha.social/@bruno"]
+            - ["Github", "https://github.com/rochacbruno"]
+            - ["Linkedin", "https://www.linkedin.com/in/rochacbruno/"]
+            - ["Links", "https://bruno.rocha.social"]
+    karlamagueta:
+        name: Karla Magueta
+        avatar: https://github.com/karlamagueta.png
+        links:
+            - ["Github", "https://github.com/karlamagueta"]
 
 # extra data for template customization
 extra:
-  colorscheme_toggle: true
-  # colorscheme: minimal_wb
-  static_folders:
-    - extrastatic
-  # colorscheme: gruvbox
-  # fediverse_verification: https://mastodon.social/@me
+    colorscheme_toggle: true
+    # colorscheme: minimal_wb
+    static_folders:
+        - extrastatic
+    media_gallery:
+        source: gallery
 
+    # colorscheme: gruvbox
+    # fediverse_verification: https://mastodon.social/@me
 # Example, to enable comments:
 # Go to: https://giscus.app/ and generate your config and replace below.
 # If you prefer to use a different commenting system just replace accordingly

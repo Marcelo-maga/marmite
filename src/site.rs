@@ -14,7 +14,8 @@ use rayon::prelude::*;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
-use std::path::Path;
+use std::ffi::OsStr;
+use std::path::{Path, PathBuf};
 use std::vec;
 use std::{fs, process, sync::Arc, sync::Mutex};
 use tera::{Context, Tera};
@@ -189,6 +190,7 @@ pub fn generate(
             [
                 "render_templates",
                 "handle_static_artifacts",
+                "handle_media_gallery",
                 "generate_search_index",
             ]
             .par_iter()
@@ -210,6 +212,14 @@ pub fn generate(
                 }
                 "handle_static_artifacts" => {
                     handle_static_artifacts(
+                        &moved_input_folder,
+                        &site_data,
+                        &moved_output_folder,
+                        &content_folder,
+                    );
+                }
+                "handle_media_gallery" => {
+                    handle_media_gallery(
                         &moved_input_folder,
                         &site_data,
                         &moved_output_folder,
@@ -909,6 +919,57 @@ fn handle_static_artifacts(
             }
         }
     }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MediaGalleryConfig {
+    pub source: std::path::PathBuf,
+}
+
+fn handle_media_gallery(
+    input_folder: &Path,
+    site_data: &Data,
+    output_folder: &Arc<std::path::PathBuf>,
+    content_dir: &std::path::Path,
+) {
+    if let Some(extra_data) = site_data.site.extra.clone() {
+        if let Some(media_gallery_value) = extra_data.get("media_gallery") {
+            if let Ok(gallery_config) =
+                serde_yaml::from_value::<MediaGalleryConfig>(media_gallery_value.clone())
+            {
+                let gallery_folder = input_folder.join(&gallery_config.source);
+                let media_extensions = ["jpg", "png", "gif", "webp", "bmp"];
+
+                for entry in WalkDir::new(&gallery_folder)
+                    .into_iter()
+                    .filter_map(Result::ok)
+                {
+                    if entry.path().is_file() {
+                        if let Some(ext) = entry.path().extension().and_then(OsStr::to_str) {
+                            if media_extensions.contains(&ext.to_lowercase().as_str()) {
+                                let image_path = entry.path().to_path_buf();
+                                let image_name = image_path.file_name().unwrap().to_str().unwrap();
+
+                                let mut gallery_path = PathBuf::from(&**output_folder);
+                                gallery_path.push(&site_data.site.media_path);
+                                gallery_path.push("gallery/");
+
+                                let image_gallery_path = gallery_path.join(image_name);
+
+                                if !gallery_path.exists() {
+                                    fs::create_dir_all(&gallery_path).unwrap();
+                                }
+
+                                fs::copy(&image_path, image_gallery_path).unwrap();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    process::exit(0)
 }
 
 fn generate_search_index(site_data: &Data, output_folder: &Arc<std::path::PathBuf>) {
