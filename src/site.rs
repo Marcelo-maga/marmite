@@ -960,7 +960,17 @@ fn handle_media_gallery(
                                     fs::create_dir_all(&gallery_path).unwrap();
                                 }
 
-                                fs::copy(&image_path, image_gallery_path).unwrap();
+                                fs::copy(&image_path, &image_gallery_path).unwrap();
+
+                                let image_path_md = image_path.with_extension("md");
+                                let markdown_filename = image_path_md.file_name().unwrap();
+                                let markdown_path = Path::new(&content_dir).join(markdown_filename);
+
+                                let image_gallery_path_str = image_gallery_path.to_str().unwrap();
+
+                                let content = format!("![image info]({image_gallery_path_str})",);
+
+                                fs::write(markdown_path, content).unwrap();
                             }
                         }
                     }

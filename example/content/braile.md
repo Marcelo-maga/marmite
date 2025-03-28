@@ -1,0 +1,1 @@
+![image info](../site_example\media\gallery/braile.png)

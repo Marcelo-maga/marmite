@@ -1,0 +1,1 @@
+![image info](../site_example\media\gallery/fragments_content.png)

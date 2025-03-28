@@ -1,3 +1,5 @@
+set shell := ["powershell.exe", "-c"]
+
 check:
     cargo fmt -- --check
     cargo clippy
